@@ -159,8 +159,8 @@ angular.module("ddDragDrop", [])
       betweenItems = null
       throw 'dd-sort attribute must be either "vertical" or "horizontal"' unless sortDir && /vertical|horizontal/.test(sortDir)
 
-      if !angular.isArray dropModel
-        $log('ddDroppable attribute needs to point to an available array')
+#      if !angular.isArray dropModel
+#        $log('ddDroppable attribute needs to point to an available array')
 
       attrs.ddChannel = attrs.ddChannel or 'ddDefaultChannel'
 

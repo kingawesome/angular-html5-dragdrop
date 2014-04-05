@@ -183,9 +183,6 @@ To change this template use File | Settings | File Templates.
       if (!(sortDir && /vertical|horizontal/.test(sortDir))) {
         throw 'dd-sort attribute must be either "vertical" or "horizontal"';
       }
-      if (!angular.isArray(dropModel)) {
-        $log('ddDroppable attribute needs to point to an available array');
-      }
       attrs.ddChannel = attrs.ddChannel || 'ddDefaultChannel';
       actionClasses = {
         ddDropTargetClass: attrs.ddDropTargetClass || 'drop-target',
