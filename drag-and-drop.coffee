@@ -150,7 +150,10 @@ angular.module("ddDragDrop", [])
     (scope, element, attrs) ->
 
       sortWithin = null
-      dropModel = $parse(attrs.ddDroppable)(scope)
+      dropModel = null
+      scope.$watch(attrs.ddDroppable, (newModel) ->
+        dropModel = newModel
+      )
       # Get ddSort and make sure it's valid
       sortDir = attrs.ddSort
       betweenItems = null

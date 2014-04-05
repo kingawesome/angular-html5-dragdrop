@@ -174,7 +174,10 @@ To change this template use File | Settings | File Templates.
       var actionClasses, addMarkers, betweenItems, dropModel, onDragEnter, onDragLeave, onDragOver, onDrop, removeMarkers, sortDir, sortWithin;
 
       sortWithin = null;
-      dropModel = $parse(attrs.ddDroppable)(scope);
+      dropModel = null;
+      scope.$watch(attrs.ddDroppable, function(newModel) {
+        return dropModel = newModel;
+      });
       sortDir = attrs.ddSort;
       betweenItems = null;
       if (!(sortDir && /vertical|horizontal/.test(sortDir))) {
