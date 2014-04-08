@@ -1,0 +1,16 @@
+{
+  "name": "angular-html5-dragdrop",
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-contrib-coffee": "~0.10.1",
+    "karma": "~0.12.4",
+    "grunt-karma": "~0.8.2",
+    "grunt-open": "~0.2.3",
+    "karma-coffee-preprocessor": "~0.2.1"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}

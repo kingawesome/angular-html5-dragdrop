@@ -15,7 +15,7 @@
   <div class="row">
     <div class="span6">
       <table class="data-table">
-        <tr dd-droppable="columns" dd-sort="horizontal">
+        <tr dd-droppable="columns" dd-sort="horizontal" dd-on-drop="dropFn(data, $event)">
           <th dd-draggable="columns" ng-repeat="column in columns track by $index" dd-drag-data="column" dd-drag-helper="columnDragHelper(column.name)">
             <span>{{column.name}}</span>
           </th>
@@ -31,7 +31,7 @@
 
 
 <script type="text/javascript" src="js/app.js"></script>
-<script type="text/javascript" src="drag-and-drop.js"></script>
+<script type="text/javascript" src="src/drag-and-drop.js"></script>
 
 
 </body>

@@ -1,9 +1,9 @@
 {
-  "name": "angular-dragdrop",
+  "name": "angular-html5-dragdrop",
   "version": "1.0.0",
-  "homepage": "https://github.com/ganarajpr/angular-dragdrop",
+  "homepage": "https://github.com/jasonaden/angular-html5-dragdrop",
   "authors": [
-    "ganarajpr"
+    "jasonaden"
   ],
   "description": "A Native ( without jquery ) Drag and Drop directive for AngularJS using HTML5 Drag and Drop.",
   "main": "draganddrop.js",
@@ -15,10 +15,12 @@
   ],
   "license": "MIT",
   "ignore": [
-    "**/.*",
     "node_modules",
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "angular": "~1.2.16"
+  }
 }

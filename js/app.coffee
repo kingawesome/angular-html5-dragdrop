@@ -1,5 +1,5 @@
 
-angular.module('app', ['ddDragDrop','hljs'])
+angular.module('app', ['Html5DragDrop','hljs'])
 
 .controller('ApplicationController', ($scope) ->
     $scope.columns = [
@@ -15,4 +15,7 @@ angular.module('app', ['ddDragDrop','hljs'])
 
     $scope.columnDragHelper = (columnText) ->
       "<div class='column-drag-helper'>#{columnText.toUpperCase()}</div>"
+
+    $scope.dropFn = (data, $event)->
+      console.log 'dropped it!', data, $event
   )
