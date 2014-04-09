@@ -171,6 +171,7 @@ mod.provider('ddHelperService', ->
      * @returns {Object} object x/y coordinates of event
     ###
     getCoords: (evt) ->
+      console.log "clientX: #{evt.originalEvent.clientX} clientY: #{evt.originalEvent.clientY} | pageX: #{evt.originalEvent.clientX} pageY: #{evt.originalEvent.pageY}"
       x: evt.originalEvent?.clientX or evt.clientX
       y: evt.originalEvent?.clientY or evt.clientY
 
@@ -188,7 +189,7 @@ mod.provider('ddHelperService', ->
      * @returns {Object} object top, left, bottom, right positions in object
     ###
     getBox: (element) ->
-      offset = element.offset()
+      return unless offset = element.offset()
       top: offset.top
       left: offset.left
       bottom: offset.top + element.outerHeight()
@@ -242,8 +243,8 @@ mod.provider('ddHelperService', ->
      * @returns {Object} elements Object with 'first' and 'last' elements that the event is between
     ###
     isBetween: (direction, collection, over, evt) ->
-      targetBox = @getBox over
-      coords = @getCoords evt
+      return unless targetBox = @getBox over
+      return unless coords = @getCoords evt
       targetBox.middleX = (targetBox.right - targetBox.left) / 2 + targetBox.left
       targetBox.middleY = (targetBox.bottom - targetBox.top) / 2 + targetBox.top
 
@@ -251,13 +252,13 @@ mod.provider('ddHelperService', ->
 
       return unless @contains(targetBox, coords)
 
-      if direction == 'horizontal'
-        if coords.x > targetBox.middleX
-          lastElement = over
-          firstElement = over.next()
-        else
-          firstElement = over
-          lastElement = over.prev()
+      if direction == 'horizontal' && coords.x > targetBox.middleX or
+      direction == 'vertical' && coords.y > targetBox.middleY
+        lastElement = over
+        firstElement = over.next().filter(collection)
+      else
+        firstElement = over
+        lastElement = over.prev().filter(collection)
 
       first: firstElement
       last: lastElement
@@ -442,6 +443,7 @@ mod.directive('ddDroppable', ($parse, $rootScope, $document, $timeout, $log, ddH
         dragModelIndex = dragModel.indexOf(dragData)
         dropModelIndex = -1
         # If we have a "first" item, insert after it, otherwise insert before the "last" item
+        console.log betweenItems
         if betweenItems.first?.length
           dropModelIndex = sortWithin.index(betweenItems.first)
         else if betweenItems.last?.length

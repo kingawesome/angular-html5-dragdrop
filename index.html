@@ -16,9 +16,11 @@
     <div class="span6">
       <table class="data-table">
         <tr dd-droppable="columns" dd-sort="horizontal" dd-on-drop="dropFn(data, $event)">
+          <th>Before Col</th>
           <th dd-draggable="columns" ng-repeat="column in columns track by $index" dd-drag-data="column" dd-drag-helper="columnDragHelper(column.name)">
             <span>{{column.name}}</span>
           </th>
+          <th>After Col</th>
         </tr>
         <tr ng-repeat="row in rows">
           <td ng-repeat="cell in row.cells">{{cell.value}}</td>

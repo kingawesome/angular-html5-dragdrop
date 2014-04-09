@@ -207,6 +207,7 @@
           getCoords: function(evt) {
             var _ref, _ref1;
 
+            console.log("clientX: " + evt.originalEvent.clientX + " clientY: " + evt.originalEvent.clientY + " | pageX: " + evt.originalEvent.clientX + " pageY: " + evt.originalEvent.pageY);
             return {
               x: ((_ref = evt.originalEvent) != null ? _ref.clientX : void 0) || evt.clientX,
               y: ((_ref1 = evt.originalEvent) != null ? _ref1.clientY : void 0) || evt.clientY
@@ -228,7 +229,9 @@
           getBox: function(element) {
             var offset;
 
-            offset = element.offset();
+            if (!(offset = element.offset())) {
+              return;
+            }
             return {
               top: offset.top,
               left: offset.left,
@@ -289,22 +292,24 @@
           isBetween: function(direction, collection, over, evt) {
             var coords, firstElement, lastElement, targetBox;
 
-            targetBox = this.getBox(over);
-            coords = this.getCoords(evt);
+            if (!(targetBox = this.getBox(over))) {
+              return;
+            }
+            if (!(coords = this.getCoords(evt))) {
+              return;
+            }
             targetBox.middleX = (targetBox.right - targetBox.left) / 2 + targetBox.left;
             targetBox.middleY = (targetBox.bottom - targetBox.top) / 2 + targetBox.top;
             firstElement = lastElement = null;
             if (!this.contains(targetBox, coords)) {
               return;
             }
-            if (direction === 'horizontal') {
-              if (coords.x > targetBox.middleX) {
-                lastElement = over;
-                firstElement = over.next();
-              } else {
-                firstElement = over;
-                lastElement = over.prev();
-              }
+            if (direction === 'horizontal' && coords.x > targetBox.middleX || direction === 'vertical' && coords.y > targetBox.middleY) {
+              lastElement = over;
+              firstElement = over.next().filter(collection);
+            } else {
+              firstElement = over;
+              lastElement = over.prev().filter(collection);
             }
             return {
               first: firstElement,
@@ -483,6 +488,7 @@
           removeMarkers(betweenItems);
           dragModelIndex = dragModel.indexOf(dragData);
           dropModelIndex = -1;
+          console.log(betweenItems);
           if ((_ref = betweenItems.first) != null ? _ref.length : void 0) {
             dropModelIndex = sortWithin.index(betweenItems.first);
           } else if ((_ref1 = betweenItems.last) != null ? _ref1.length : void 0) {
