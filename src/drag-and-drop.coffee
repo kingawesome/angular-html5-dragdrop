@@ -301,6 +301,8 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
     element.bind 'dragstart', (e) ->
       # Attach the drag data and activate the channel
       angular.element(@).data 'ddDragData', dragData
+      # We have to set the drag data for FireFox to honor drag/drop
+      e.dataTransfer.setData("text/plain", scope.$$id)
       ddHelperService.activateChannel attrs.ddChannel, @
 
       # By default draggable will make an image of the element being dragged. Set ddDragHelper to create a custom helper
@@ -325,10 +327,11 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
         body.append cover if cover.length
         body.append helperEl
         e.dataTransfer.setDragImage helperEl[0], coords.x, coords.y
-        e.dataTransfer.dropEffect = 'none'
+#        e.dataTransfer.dropEffect = 'move'
         $timeout (->
           helperEl.remove()
           cover.remove()
+          e.dataTransfer.dropEffect = 'move'
           return
         ), 0, false
       return
@@ -392,7 +395,7 @@ mod.directive('ddDroppable', ($parse, $rootScope, $document, $timeout, $log, ddH
     onDragOver = (e) ->
       e.preventDefault()  if e.preventDefault # Necessary. Allows us to drop.
       e.stopPropagation()  if e.stopPropagation
-      e.dataTransfer.dropEffect = 'none'
+      e.dataTransfer.dropEffect = 'move'
 
       # determine if we are doing sorting or not
       if sortDir
@@ -408,7 +411,7 @@ mod.directive('ddDroppable', ($parse, $rootScope, $document, $timeout, $log, ddH
       false
     # Called one time when draggable enters element
     onDragEnter = (e) ->
-      e.dataTransfer.dropEffect = 'none'
+      e.dataTransfer.dropEffect = 'move'
       if !sortDir
         element.addClass actionClasses.ddDragEnterClass
 

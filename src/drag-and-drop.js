@@ -351,6 +351,7 @@
         var coords, cover, helperEl;
 
         angular.element(this).data('ddDragData', dragData);
+        e.dataTransfer.setData("text/plain", scope.$$id);
         ddHelperService.activateChannel(attrs.ddChannel, this);
         if (attrs.ddDragHelper) {
           helperEl = angular.element($parse(attrs.ddDragHelper)(scope));
@@ -370,10 +371,10 @@
           }
           body.append(helperEl);
           e.dataTransfer.setDragImage(helperEl[0], coords.x, coords.y);
-          e.dataTransfer.dropEffect = 'none';
           $timeout((function() {
             helperEl.remove();
             cover.remove();
+            e.dataTransfer.dropEffect = 'move';
           }), 0, false);
         }
       });
@@ -436,7 +437,7 @@
         if (e.stopPropagation) {
           e.stopPropagation();
         }
-        e.dataTransfer.dropEffect = 'none';
+        e.dataTransfer.dropEffect = 'move';
         if (sortDir) {
           oldBetween = betweenItems;
           betweenItems = ddHelperService.isBetween(sortDir, sortWithin, angular.element(e.target).closest(sortWithin), e);
@@ -452,7 +453,7 @@
         return false;
       };
       onDragEnter = function(e) {
-        e.dataTransfer.dropEffect = 'none';
+        e.dataTransfer.dropEffect = 'move';
         if (!sortDir) {
           element.addClass(actionClasses.ddDragEnterClass);
         }
