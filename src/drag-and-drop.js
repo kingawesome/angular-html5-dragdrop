@@ -207,10 +207,9 @@
           getCoords: function(evt) {
             var _ref, _ref1;
 
-            console.log("clientX: " + evt.originalEvent.clientX + " clientY: " + evt.originalEvent.clientY + " | pageX: " + evt.originalEvent.clientX + " pageY: " + evt.originalEvent.pageY);
             return {
-              x: ((_ref = evt.originalEvent) != null ? _ref.clientX : void 0) || evt.clientX,
-              y: ((_ref1 = evt.originalEvent) != null ? _ref1.clientY : void 0) || evt.clientY
+              x: ((_ref = evt.originalEvent) != null ? _ref.pageX : void 0) || evt.pageX,
+              y: ((_ref1 = evt.originalEvent) != null ? _ref1.pageY : void 0) || evt.pageY
             };
           },
           /*

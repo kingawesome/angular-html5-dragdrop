@@ -171,9 +171,8 @@ mod.provider('ddHelperService', ->
      * @returns {Object} object x/y coordinates of event
     ###
     getCoords: (evt) ->
-      console.log "clientX: #{evt.originalEvent.clientX} clientY: #{evt.originalEvent.clientY} | pageX: #{evt.originalEvent.clientX} pageY: #{evt.originalEvent.pageY}"
-      x: evt.originalEvent?.clientX or evt.clientX
-      y: evt.originalEvent?.clientY or evt.clientY
+      x: evt.originalEvent?.pageX or evt.pageX
+      y: evt.originalEvent?.pageY or evt.pageY
 
 
     ###
