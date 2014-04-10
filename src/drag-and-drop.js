@@ -119,7 +119,9 @@
           */
 
           onChannelActivate: function(channel, listener) {
-            if (!activateChannelListeners[channel]) {
+            var _ref;
+
+            if ((_ref = activateChannelListeners[channel]) == null) {
               activateChannelListeners[channel] = [];
             }
             activateChannelListeners[channel].push(listener);
@@ -139,7 +141,9 @@
           */
 
           onChannelDeactivate: function(channel, listener) {
-            if (!deactivateChannelListeners[channel]) {
+            var _ref;
+
+            if ((_ref = deactivateChannelListeners[channel]) == null) {
               deactivateChannelListeners[channel] = [];
             }
             deactivateChannelListeners[channel].push(listener);
@@ -339,7 +343,7 @@
 
   mod.directive('ddDraggable', function($parse, $rootScope, $document, $timeout, ddHelperService) {
     if (window.jQuery && window.jQuery.event.props.indexOf('dataTransfer' === -1)) {
-      window.jQuery.event.props.push("dataTransfer");
+      angular.element.event.props.push("dataTransfer");
     }
     return function(scope, element, attrs) {
       var body, dragData;
@@ -351,7 +355,7 @@
       scope.$watch(attrs.ddDragData, function(newValue) {
         return dragData = newValue;
       });
-      element.bind('dragstart', function(e) {
+      element.on('dragstart', function(e) {
         var coords, cover, helperEl;
 
         angular.element(this).data('ddDragData', dragData);
@@ -382,7 +386,7 @@
           }), 0, false);
         }
       });
-      return element.bind("dragend", function(e) {
+      return element.on("dragend", function(e) {
         var fn;
 
         ddHelperService.deactivateChannel(attrs.ddChannel);
@@ -532,17 +536,17 @@
         element.removeClass(actionClasses.ddDragEnterClass);
       };
       ddHelperService.onChannelActivate(attrs.ddChannel, function() {
-        element.bind("dragover", onDragOver);
-        element.bind("dragenter", onDragEnter);
-        element.bind("dragleave", onDragLeave);
-        element.bind("drop", onDrop);
+        element.on("dragover", onDragOver);
+        element.on("dragenter", onDragEnter);
+        element.on("dragleave", onDragLeave);
+        element.on("drop", onDrop);
         element.addClass(actionClasses.ddDropTargetClass);
         return sortWithin = element.children('[ng-repeat]');
       });
       return ddHelperService.onChannelDeactivate(attrs.ddChannel, function() {
-        element.unbind("dragover", onDragOver);
-        element.unbind("dragenter", onDragEnter);
-        element.unbind("drop", onDrop);
+        element.off("dragover", onDragOver);
+        element.off("dragenter", onDragEnter);
+        element.off("drop", onDrop);
         element.removeClass(actionClasses.ddDropTargetClass);
         return sortWithin = null;
       });

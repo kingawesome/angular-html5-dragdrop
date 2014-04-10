@@ -102,7 +102,7 @@ mod.provider('ddHelperService', ->
      * @returns {null}
     ###
     onChannelActivate: (channel, listener) ->
-      activateChannelListeners[channel] = [] if !activateChannelListeners[channel]
+      activateChannelListeners[channel] ?= []
       activateChannelListeners[channel].push listener
       return
 
@@ -120,7 +120,7 @@ mod.provider('ddHelperService', ->
      * @returns {null}
     ###
     onChannelDeactivate: (channel, listener) ->
-      deactivateChannelListeners[channel] = [] if !deactivateChannelListeners[channel]
+      deactivateChannelListeners[channel] ?= []
       deactivateChannelListeners[channel].push listener
       return
 
@@ -281,7 +281,7 @@ mod.provider('ddHelperService', ->
 mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperService) ->
 
   # Make sure jQuery passes the dataTransfer property on events
-  window.jQuery.event.props.push "dataTransfer" if window.jQuery and window.jQuery.event.props.indexOf 'dataTransfer' == -1
+  angular.element.event.props.push "dataTransfer" if window.jQuery and window.jQuery.event.props.indexOf 'dataTransfer' == -1
 
   (scope, element, attrs) ->
     dragData = null
@@ -298,7 +298,7 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
       dragData = newValue
 
     # Native 'dragstart' event
-    element.bind 'dragstart', (e) ->
+    element.on 'dragstart', (e) ->
       # Attach the drag data and activate the channel
       angular.element(@).data 'ddDragData', dragData
       # We have to set the drag data for FireFox to honor drag/drop
@@ -337,8 +337,7 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
       return
 
     # undo some things when dropping the element
-    element.bind "dragend", (e) ->
-
+    element.on "dragend", (e) ->
       ddHelperService.deactivateChannel attrs.ddChannel
 
       # remove from where it was dragged
@@ -385,6 +384,7 @@ mod.directive('ddDroppable', ($parse, $rootScope, $document, $timeout, $log, ddH
       return unless elements
       elements.first.removeClass actionClasses.ddDragSortClass + '-before'
       elements.last.removeClass actionClasses.ddDragSortClass + '-after'
+
     addMarkers = (elements) ->
       return unless elements
       elements.first.addClass actionClasses.ddDragSortClass + '-before'
@@ -478,19 +478,19 @@ mod.directive('ddDroppable', ($parse, $rootScope, $document, $timeout, $log, ddH
 
     # Register with this channel
     ddHelperService.onChannelActivate attrs.ddChannel, ->
-      element.bind "dragover", onDragOver
-      element.bind "dragenter", onDragEnter
-      element.bind "dragleave", onDragLeave
-      element.bind "drop", onDrop
+      element.on "dragover", onDragOver
+      element.on "dragenter", onDragEnter
+      element.on "dragleave", onDragLeave
+      element.on "drop", onDrop
       element.addClass actionClasses.ddDropTargetClass
       # setup the sortWithin items
       sortWithin = element.children('[ng-repeat]')
 
     # Register with this channel
     ddHelperService.onChannelDeactivate attrs.ddChannel, ->
-      element.unbind "dragover", onDragOver
-      element.unbind "dragenter", onDragEnter
-      element.unbind "drop", onDrop
+      element.off "dragover", onDragOver
+      element.off "dragenter", onDragEnter
+      element.off "drop", onDrop
       element.removeClass actionClasses.ddDropTargetClass
       # reset sortWithin
       sortWithin = null
