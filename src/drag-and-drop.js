@@ -367,7 +367,11 @@
         dragEl.data('ddDragData', dragData);
         e.dataTransfer.setData("text/plain", scope.$$id);
         ddHelperService.activateChannel(attrs.ddChannel, this);
-        dragEl.addClass(attrs.ddDragClass);
+        if (!attrs.ddDragging) {
+          dragEl.addClass(attrs.ddDragClass);
+        } else {
+          angular.element("[dd-dragging='" + attrs.ddDragging + "']").addClass(attrs.ddDragClass);
+        }
         if (attrs.ddDragHelper) {
           helperEl = angular.element($parse(attrs.ddDragHelper)(scope));
           coords = $parse(attrs.ddDragHelperCoords)(scope) || {
@@ -396,7 +400,11 @@
       return element.on("dragend", function(e) {
         var fn;
 
-        angular.element(this).removeClass(attrs.ddDragClass);
+        if (!attrs.ddDragging) {
+          dragEl.removeClass(attrs.ddDragClass);
+        } else {
+          angular.element("[dd-dragging='" + attrs.ddDragging + "']").removeClass(attrs.ddDragClass);
+        }
         ddHelperService.deactivateChannel(attrs.ddChannel);
         if (e.dataTransfer && e.dataTransfer.dropEffect !== "none") {
           if (attrs.ddOnDropSuccess) {

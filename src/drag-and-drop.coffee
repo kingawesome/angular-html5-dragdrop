@@ -308,7 +308,10 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
       ddHelperService.activateChannel attrs.ddChannel, @
 
       # Add drag class
-      dragEl.addClass attrs.ddDragClass
+      if !attrs.ddDragging
+        dragEl.addClass attrs.ddDragClass
+      else
+        angular.element("[dd-dragging='#{attrs.ddDragging}']").addClass attrs.ddDragClass
 
       # By default draggable will make an image of the element being dragged. Set ddDragHelper to create a custom helper
       if attrs.ddDragHelper
@@ -343,7 +346,11 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
 
     # undo some things when dropping the element
     element.on "dragend", (e) ->
-      angular.element(@).removeClass attrs.ddDragClass
+      if !attrs.ddDragging
+        dragEl.removeClass attrs.ddDragClass
+      else
+        angular.element("[dd-dragging='#{attrs.ddDragging}']").removeClass attrs.ddDragClass
+
       ddHelperService.deactivateChannel attrs.ddChannel
 
       # remove from where it was dragged

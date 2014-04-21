@@ -17,7 +17,7 @@
       <table class="data-table">
         <tr dd-droppable="columns" dd-sort="horizontal" dd-on-drop="dropFn(data, $event)">
           <th>Before Col</th>
-          <th dd-draggable="columns" ng-repeat="column in columns track by $index" dd-drag-data="column" dd-drag-helper="columnDragHelper(column.name)">
+          <th dd-draggable="columns" ng-repeat="column in columns track by $index" dd-drag-data="column" dd-drag-helper="columnDragHelper(column.name)" dd-dragging="{{column.name}}">
             <span>{{column.name}}</span>
           </th>
           <th>After Col</th>
