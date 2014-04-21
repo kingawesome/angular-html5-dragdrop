@@ -115,7 +115,7 @@ mod.provider('ddHelperService', ->
      * @description Add a function to run when a particular channel is deactivated. E.g. removing drop listeners.
      *
      * @param {string} channel Channel name
-     * @param {function} listener Function to run when this channel is activated
+     * @param {function} listener Function to run when this channel is deactivated
      *
      * @returns {null}
     ###
@@ -130,7 +130,7 @@ mod.provider('ddHelperService', ->
      * @methodOf Html5DragDrop.service:ddHelperService
      * @function
      *
-     * @description Activate a channel. This should only be run internally when dragging starts
+     * @description Activate a channel by invoking the activation listeners associated with it. This should only be run internally when dragging starts
      *
      * @param {string} channel Channel name
      * @param {Element} element Element being dragged that activates this channel
@@ -147,7 +147,7 @@ mod.provider('ddHelperService', ->
      * @methodOf Html5DragDrop.service:ddHelperService
      * @function
      *
-     * @description Deactivate a channel. This should only run internally when dragging ends.
+     * @description Deactivate a channel by invoking the deactivation listeners associated with it. This should only run internally when dragging ends.
      *
      * @param {string} channel Channel name
      *
@@ -200,7 +200,7 @@ mod.provider('ddHelperService', ->
      * @methodOf Html5DragDrop.service:ddHelperService
      * @function
      *
-     * @description Determine if a box (getBox(element) contains a coord map (coords(event))
+     * @description Determine if a box (getBox(element) contains a coord map (getCoords(event))
      *
      * @param {Object} box Box coordinates from getBox(element) method
      * @param {Object} coords Coordinates from getCoords(event) method
@@ -232,7 +232,7 @@ mod.provider('ddHelperService', ->
      * @methodOf Html5DragDrop.service:ddHelperService
      * @function
      *
-     * @description Takes a mouse event and a collection and determines which items in the collection the mouse is over.
+     * @description Takes a mouse event and a collection and determines which items in the collection the mouse is "over". "Over" includes the element the mouse is actually over and either the element before or the element after, depending on where the mouse is in relation to the element it is actually over.
      *
      * @param {String} direction 'horizontal' or 'vertical'
      * @param {Array} collection jQuery collection of elements
@@ -247,6 +247,8 @@ mod.provider('ddHelperService', ->
       targetBox.middleX = (targetBox.right - targetBox.left) / 2 + targetBox.left
       targetBox.middleY = (targetBox.bottom - targetBox.top) / 2 + targetBox.top
 
+      # 'firstElement' is the element that shows the between bar at its 'front' (left when collection is horizontal)
+      # 'lastElement' is the one that shows the between bar at its 'end' (right when collection is horizontal)
       firstElement = lastElement = null
 
       return unless @contains(targetBox, coords)
@@ -283,6 +285,7 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
   # Make sure jQuery passes the dataTransfer property on events
   angular.element.event.props.push "dataTransfer" if window.jQuery and window.jQuery.event.props.indexOf 'dataTransfer' == -1
 
+  # link function
   (scope, element, attrs) ->
     dragData = null
     body = $document.find('body')
@@ -372,6 +375,7 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
 
 mod.directive('ddDroppable', ($parse, $rootScope, $document, $timeout, $log, ddHelperService) ->
 
+  # link function
   (scope, element, attrs) ->
 
     sortWithin = dropModel = betweenItems = null
