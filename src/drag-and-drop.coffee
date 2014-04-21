@@ -288,7 +288,8 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
     body = $document.find('body')
 
     # We must have a channel attached
-    attrs.ddChannel = attrs.ddChannel or 'ddDefaultChannel'
+    attrs.ddChannel ?= 'ddDefaultChannel'
+    attrs.ddDragClass ?= 'dd-dragging'
 
     # Turn on HTML 5 draggable
     element.attr "draggable", true
@@ -299,11 +300,15 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
 
     # Native 'dragstart' event
     element.on 'dragstart', (e) ->
+      dragEl = angular.element(@)
       # Attach the drag data and activate the channel
-      angular.element(@).data 'ddDragData', dragData
+      dragEl.data 'ddDragData', dragData
       # We have to set the drag data for FireFox to honor drag/drop
       e.dataTransfer.setData("text/plain", scope.$$id)
       ddHelperService.activateChannel attrs.ddChannel, @
+
+      # Add drag class
+      dragEl.addClass attrs.ddDragClass
 
       # By default draggable will make an image of the element being dragged. Set ddDragHelper to create a custom helper
       if attrs.ddDragHelper
@@ -338,6 +343,7 @@ mod.directive('ddDraggable', ($parse, $rootScope, $document, $timeout, ddHelperS
 
     # undo some things when dropping the element
     element.on "dragend", (e) ->
+      angular.element(@).removeClass attrs.ddDragClass
       ddHelperService.deactivateChannel attrs.ddChannel
 
       # remove from where it was dragged

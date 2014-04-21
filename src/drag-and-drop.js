@@ -346,21 +346,28 @@
       angular.element.event.props.push("dataTransfer");
     }
     return function(scope, element, attrs) {
-      var body, dragData;
+      var body, dragData, _ref, _ref1;
 
       dragData = null;
       body = $document.find('body');
-      attrs.ddChannel = attrs.ddChannel || 'ddDefaultChannel';
+      if ((_ref = attrs.ddChannel) == null) {
+        attrs.ddChannel = 'ddDefaultChannel';
+      }
+      if ((_ref1 = attrs.ddDragClass) == null) {
+        attrs.ddDragClass = 'dd-dragging';
+      }
       element.attr("draggable", true);
       scope.$watch(attrs.ddDragData, function(newValue) {
         return dragData = newValue;
       });
       element.on('dragstart', function(e) {
-        var coords, cover, helperEl;
+        var coords, cover, dragEl, helperEl;
 
-        angular.element(this).data('ddDragData', dragData);
+        dragEl = angular.element(this);
+        dragEl.data('ddDragData', dragData);
         e.dataTransfer.setData("text/plain", scope.$$id);
         ddHelperService.activateChannel(attrs.ddChannel, this);
+        dragEl.addClass(attrs.ddDragClass);
         if (attrs.ddDragHelper) {
           helperEl = angular.element($parse(attrs.ddDragHelper)(scope));
           coords = $parse(attrs.ddDragHelperCoords)(scope) || {
@@ -389,6 +396,7 @@
       return element.on("dragend", function(e) {
         var fn;
 
+        angular.element(this).removeClass(attrs.ddDragClass);
         ddHelperService.deactivateChannel(attrs.ddChannel);
         if (e.dataTransfer && e.dataTransfer.dropEffect !== "none") {
           if (attrs.ddOnDropSuccess) {
