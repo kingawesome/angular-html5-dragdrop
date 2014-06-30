@@ -4,14 +4,18 @@
     <title>Angular DragDrop</title>
     <link rel="stylesheet" href="css/bootstrap.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
-    <script src="//code.jquery.com/jquery-1.11.0.js"></script>
-    <script data-require="angular.js@1.1.x" src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"
+    <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
+    <script data-require="angular.js@1.1.x" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"
             data-semver="1.1.5"></script>
     <script src="http://pc035860.github.io/angular-highlightjs/angular-highlightjs.min.js"></script>
 </head>
 <body ng-controller="ApplicationController">
 
-<div class="container">
+<button ng-click='hidden.hide = !hidden.hide'>
+{{hidden.hide}}
+</button>
+
+<div class="container" ng-if="!hidden.hide">
   <div class="row">
     <div class="span6">
       <table class="data-table">

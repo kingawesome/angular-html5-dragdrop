@@ -14,6 +14,7 @@
         name: 'Header 5'
       }
     ];
+    $scope.hidden = {hide: false};
     $scope.columnDragHelper = function(columnText) {
       return "<div class='column-drag-helper'>" + (columnText.toUpperCase()) + "</div>";
     };

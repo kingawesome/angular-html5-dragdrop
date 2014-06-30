@@ -6,21 +6,17 @@ var mountFolder = function (connect, dir) {
 
 module.exports = function (grunt) {
   // load all grunt tasks
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  //require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  require('load-grunt-tasks')(grunt);
 
-  // configurable paths
-  var yeomanConfig = {
-    app: 'app',
-    dist: 'dist',
-    test: 'test'
-  };
-
-  try {
-    yeomanConfig.app = require('./component.json').appPath || yeomanConfig.app;
-  } catch (e) {}
+  require('time-grunt')(grunt);
 
   grunt.initConfig({
-    yeoman: yeomanConfig,
+    yeoman: {
+      app: require('./bower.json').appPath || '.',
+      dist: 'dist',
+      test: 'test'
+    },
     watch: {
       coffee: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -60,7 +56,7 @@ module.exports = function (grunt) {
             return [
               lrSnippet,
               mountFolder(connect, '.tmp'),
-              mountFolder(connect, yeomanConfig.app)
+              mountFolder(connect, '.')
             ];
           }
         }
@@ -143,12 +139,12 @@ module.exports = function (grunt) {
     },
     compass: {
       options: {
-        sassDir: '<%= yeoman.app %>/styles',
-        cssDir: '.tmp/styles',
-        imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/scripts',
-        fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: '<%= yeoman.app %>/components',
+        sassDir: '<%= yeoman.app %>/css',
+        cssDir: '.tmp/css',
+        //imagesDir: '<%= yeoman.app %>/images',
+        javascriptsDir: '<%= yeoman.app %>/js',
+        //fontsDir: '<%= yeoman.app %>/styles/fonts',
+        //importPath: '<%= yeoman.app %>/components',
         relativeAssets: true
       },
       dist: {},
@@ -276,9 +272,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.renameTask('regarde', 'watch');
-
-  grunt.registerTask('server', [
+  grunt.registerTask('serve', [
     'clean:server',
     'coffee:dist',
     'compass:server',
